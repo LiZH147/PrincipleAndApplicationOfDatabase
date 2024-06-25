@@ -1,0 +1,23 @@
+.home{
+    background-attachment: fixed;
+    background-size: 1910px 938px;
+    background-image: url('../../asset/imgs/background.png') ;
+}
+.ant-card-head-wrapper{
+    color: white;
+    text-align: center;
+}
+.footbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.likes{
+    flex: 0 0 60%
+}
+.comment{
+    flex:1
+}
+.ant-list-item-meta-description{
+    color: white !important;
+}
