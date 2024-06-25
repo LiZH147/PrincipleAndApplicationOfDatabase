@@ -19,15 +19,15 @@ const bulletinCon = [
 const Bulletin = () => {
     const [bulletinCon, setBulletinCon] = useState([]);
     useEffect(() => {
-        useRequest.get({
-            url: '/bulletin/info',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(res => {
-            setBulletinCon(res)
-            console.log('bulletin', res)
-        })
+        // useRequest.get({
+        //     url: '/bulletin/info',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // }).then(res => {
+        //     setBulletinCon(res)
+        //     console.log('bulletin', res)
+        // })
     }, bulletinCon)
     return (
         <Carousel autoplay style={{ width: '50%', margin: 'auto' }}>
