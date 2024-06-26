@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button, Form, Input } from 'antd';
+import axios from 'axios';
 import useRequest from 'server/http';
 import './index.css';
 
@@ -11,23 +12,24 @@ const onFinishFailed = (errorInfo) => {
 const Register = () => {
     const navigate = useNavigate();
     const onFinish = (values) => {
-        // navigate('/home/articles');
-        console.log('Success:', values);
         const newUser = {
             name: values.username,
             password: values.password,
-            eamil: values.email,
-            uprofile: "0000"
-        }
-        useRequest.post({
-            url: '/user/create',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            newUser
-        }).then(res => {
-            console.log(res)
-        })
+            email: values.email,
+            uprofile: '0000'
+        };
+        axios.post(
+            'http://localhost:9090/user/create',
+            newUser,
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        ). then(res => {
+            console.log('注册成功')
+            navigate('/home/articles');
+        });
     };
     return (
         <div className="container">
