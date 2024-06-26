@@ -1,16 +1,20 @@
 import React, { useEffect, useState, memo, useRef } from 'react';
-import { Avatar, Button, List, Skeleton, Modal, Input } from 'antd';
+import { Avatar, Button, List, Skeleton, Modal, Input, FloatButton } from 'antd';
 import './index.css';
 import useRequest from 'server/http';
+import { useNavigate } from 'react-router-dom';
 
 const { TextArea } = Input;
 
 const Personal = () => {
     const [data, setData] = useState([]);
-    const [list, setList] = useState([{aid:0, acontent:'dsadas'},{aid:1}]);
+    const [list, setList] = useState([]);
     const [updateCont, setUpdateCont] = useState();
-    const [isModalOpen, setIsModalOpen] = useState([false, false]);
+    const [isModalOpen, setIsModalOpen] = useState([]);
+    const [isNewModalOpen, setIsNewModalOpen] = useState(false);
     const updateArticleRef = useRef();
+    const createArticleRef = useRef();
+    const navigate = useNavigate()
 
     const showModal = (idx, target, isUpdate) => {
         if (isUpdate === true) {
@@ -21,6 +25,9 @@ const Personal = () => {
             return [...p];
         });
     };
+    const showCreateModal = () => {
+        setIsNewModalOpen(true)
+    }
     const handleOk = (idx, target, isUpdate) => {
         console.log(updateArticleRef.current.value);
         if (isUpdate === true) {
@@ -36,27 +43,45 @@ const Personal = () => {
             return [...p];
         });
     };
+    const handleCreateOK = () => {
+        useRequest
+            .post({
+                url: '/article/create'
+            }).then(res => {
+                console.log('createArticle', res);
+                setIsNewModalOpen(false)
+            })
+    }
     const handleCancel = (idx, target) => {
         setIsModalOpen((p) => {
             p[idx] = target;
             return [...p];
         });
     };
-
-    // useEffect(() => {
-    //     const uid = localStorage.getItem('uid');
-    //     useRequest
-    //         .get({
-    //             url: `/article/info/${uid}`
-    //         })
-    //         .then((res) => {
-    //             setList(res);
-    //             res.forEach(() => {
-    //                 isModalOpen.push(false);
-    //             });
-    //             console.log('personalArticles', res);
-    //         });
-    // }, []);
+    const handleCreateCancel = () => {
+        setIsNewModalOpen(false)
+    }
+    const logOutUser = () => {
+        navigate('/login')
+        // localStorage.removeItem("username");
+        // localStorage.removeItem("userAvatar");
+        // localStorage.removeItem("uid");
+        console.log('注销用户')
+    }
+    useEffect(() => {
+        const uid = localStorage.getItem('uid');
+        useRequest
+            .get({
+                url: `/article/info/${uid}`
+            })
+            .then((res) => {
+                setList(res);
+                res.forEach(() => {
+                    isModalOpen.push(false);
+                });
+                console.log('personalArticles', res);
+            });
+    }, []);
 
     return (
         <div style={{ height: '100vh', color: 'white' }}>
@@ -86,7 +111,7 @@ const Personal = () => {
                             ]}
                         >
                             <Modal
-                                title="Basic Modal"
+                                title={item.atitle}
                                 open={isModalOpen[item.aid]}
                                 onOk={() => {
                                     handleOk(item.aid, false, true);
@@ -110,7 +135,24 @@ const Personal = () => {
                     )}
                 />
             </div>
-            <div className="deleteUser">注销</div>
+            <FloatButton.Group>
+                <FloatButton onClick={showCreateModal} tooltip={<div>新建文章</div>} />
+                <FloatButton onClick={logOutUser} tooltip={<div>注销</div>} />
+            </FloatButton.Group>
+            <Modal
+                title='新文章'
+                open={isNewModalOpen}
+                onOk={() => {
+                    handleCreateOK();
+                }}
+                onCancel={() => {
+                    handleCreateCancel();
+                }}
+            >
+                <textarea ref={createArticleRef}></textarea>
+            </Modal>
+
+
         </div>
     );
 };
