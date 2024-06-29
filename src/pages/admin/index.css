@@ -1,0 +1,18 @@
+.adminPage{
+    background-image: url('../../asset/imgs/background.png');
+    background-attachment: fixed;
+    background-size: 1910px 938px;
+    display: flex;
+}
+.coments{
+    flex: 0 0 50%
+}
+.article{
+    flex: 1;
+}
+.headerBar {
+    margin:auto;
+    color: white;
+    font-size: 28px;
+    background-color: rgb(22, 54, 51);
+}

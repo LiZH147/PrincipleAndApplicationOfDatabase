@@ -31,9 +31,9 @@ const Bulletin = () => {
     }, bulletinCon)
     return (
         <Carousel autoplay style={{ width: '50%', margin: 'auto' }}>
-            {bulletinCon.map((item) => {
+            {bulletinCon.map((item, idx) => {
                 return (
-                    <div>
+                    <div key={idx}>
                         <h3 style={contentStyle}>{item.bcontent}</h3>
                     </div>
                 );

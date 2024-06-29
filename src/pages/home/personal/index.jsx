@@ -1,26 +1,21 @@
 import React, { useEffect, useState, memo, useRef } from 'react';
-import { Avatar, Button, List, Skeleton, Modal, Input, FloatButton } from 'antd';
+import { Button, List, Skeleton, Modal, FloatButton } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined } from '@ant-design/icons';
 import './index.css';
-
-
-const { TextArea } = Input;
 
 const Personal = () => {
     const [list, setList] = useState([]);
-    const [updateCont, setUpdateCont] = useState();
     const [isModalOpen, setIsModalOpen] = useState([]);
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
     const updateArticleRef = useRef();
     const createArticleRef = useRef();
+    const articleTitle = useRef();
+    const updateArticleTitle = useRef();
     const navigate = useNavigate();
 
     const showModal = (idx, target, isUpdate) => {
-        if (isUpdate === true) {
-            setUpdateCont(list[idx]); // 设置内容为文章内容
-        }
         setIsModalOpen((p) => {
             p[idx] = target;
             return [...p];
@@ -29,21 +24,25 @@ const Personal = () => {
     const showCreateModal = () => {
         setIsNewModalOpen(true);
     };
-    const handleOk = (idx, target) => {
+    const handleOk = (idx, aid, target) => {
         const uid = localStorage.getItem('uid');
         const updateArticle = {
-            aid: idx,
+            aid: aid,
             uid: uid,
-            atitle: 'dasdsad',
+            atitle: updateArticleTitle.current.value,
             atime: new Date().toISOString().slice(0, 19).replace('T', ' '),
             acontent: updateArticleRef.current.value
         };
-        console.log(updateArticle)
+        let tempList = list;
+        tempList[idx] = updateArticle;
+        setList(tempList);
+
+        console.log(updateArticle);
         axios.post(`http://localhost:9090/article/update`, updateArticle).then((res) => {
-            console.log(res)
-        })
+            console.log(res);
+        });
         setIsModalOpen((p) => {
-            p[idx] = target;
+            p[aid] = target;
             return [...p];
         });
     };
@@ -60,15 +59,16 @@ const Personal = () => {
     const handleCreateOK = () => {
         const uid = localStorage.getItem('uid');
         console.log(createArticleRef.current.value);
+        console.log(articleTitle.current.value);
         const newArticle = {
             uid: uid,
-            atitle: 'dasdsad',
+            atitle: articleTitle.current.value,
             atime: new Date().toISOString().slice(0, 19).replace('T', ' '),
             acontent: createArticleRef.current.value
         };
         axios.post('http://localhost:9090/article/create', newArticle).then((res) => {
             console.log(res);
-            setIsNewModalOpen(false)
+            setIsNewModalOpen(false);
         });
     };
     const handleCancel = (idx, target) => {
@@ -99,19 +99,19 @@ const Personal = () => {
     }, []);
 
     return (
-        <div style={{ height: '100vh', color: 'white' }}>
+        <div style={{ height: '100vh' }}>
             <div className="articles">
                 <List
                     style={{
                         width: '60%',
                         margin: 'auto',
                         borderRadius: '12px',
-                        border: '2px solid white'
+                        border: '2px solid black'
                     }}
                     className="demo-loadmore-list"
                     itemLayout="horizontal"
                     dataSource={list}
-                    renderItem={(item) => (
+                    renderItem={(item, idx) => (
                         <List.Item
                             actions={[
                                 <Button
@@ -128,16 +128,22 @@ const Personal = () => {
                             ]}
                         >
                             <Modal
-                                title={item.atitle}
                                 open={isModalOpen[item.aid]}
                                 onOk={() => {
-                                    handleOk(item.aid, false);
+                                    handleOk(idx, item.aid, false, item.title);
                                 }}
                                 onCancel={() => {
                                     handleCancel(item.aid, false);
                                 }}
                             >
+                                <input
+                                    defaultValue={item.atitle}
+                                    type="text"
+                                    ref={updateArticleTitle}
+                                />
+
                                 <textarea
+                                    style={{ width: 400, height: 300, marginTop: 10 }}
                                     ref={updateArticleRef}
                                     defaultValue={item.acontent}
                                 ></textarea>
@@ -149,7 +155,10 @@ const Personal = () => {
                                 loading={false}
                                 active
                             >
-                                <List.Item.Meta description={item.atitle} />
+                                <List.Item.Meta
+                                    style={{ marginLeft: 8 }}
+                                    description={item.atitle}
+                                />
                             </Skeleton>
                         </List.Item>
                     )}
@@ -157,10 +166,10 @@ const Personal = () => {
             </div>
             <FloatButton.Group>
                 <FloatButton onClick={showCreateModal} tooltip={<div>新建文章</div>} />
-                <FloatButton icon={<LogoutOutlined />} onClick={logOutUser} tooltip={<div>注销</div>} />
+                <FloatButton onClick={logOutUser} icon={<LogoutOutlined />} tooltip={<div>注销用户</div>} />
             </FloatButton.Group>
             <Modal
-                title="新文章"
+                title="新建文章"
                 open={isNewModalOpen}
                 onOk={() => {
                     handleCreateOK();
@@ -169,7 +178,12 @@ const Personal = () => {
                     handleCreateCancel();
                 }}
             >
-                <textarea ref={createArticleRef}></textarea>
+                <input placeholder="请输入标题" type="text" ref={articleTitle} />
+                <textarea
+                    style={{ width: 400, height: 300 }}
+                    placeholder="请输入文章"
+                    ref={createArticleRef}
+                ></textarea>
             </Modal>
         </div>
     );

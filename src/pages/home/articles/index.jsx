@@ -1,18 +1,8 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Avatar, List, Space } from 'antd';
+import { List, Space } from 'antd';
 import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import useRequest from 'server/http';
 import { Link } from 'react-router-dom';
-
-// const data = Array.from({ length: 23 }).map((_, i) => ({
-//     href: 'https://ant.design',
-//     title: `ant design part ${i}`,
-//     avatar: `https://api.dicebear.com/7.x/miniavs/svg?seed=${i}`,
-//     description:
-//         'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-//     content:
-//         'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-// }));
 
 const IconText = ({ icon, text }) => (
     <Space>
@@ -31,7 +21,7 @@ const Articles = () => {
             })
             .then((res) => {
                 setArticles(res);
-                console.log('articles', articles);
+                console.log('articles', res);
             })
             .catch((err) => console.log(err));
     }, []);
@@ -45,12 +35,12 @@ const Articles = () => {
                     onChange: (page) => {
                         console.log(page);
                     },
-                    pageSize: 8,
+                    pageSize: 4,
                     align: 'center'
                 }}
                 dataSource={articles}
                 renderItem={(item) => (
-                    <Link to={`/home/articles/content?aid=${item.title}`}>
+                    <Link to={`/home/articles/content?aid=${item.aid}&atitle=${item.atitle}&acontent=${item.acontent}`}>
                         <List.Item
                             style={{ border: '2px solid white', borderRadius:'15px' }}
                             key={item.title}
@@ -81,11 +71,8 @@ const Articles = () => {
                                         {item.atitle}
                                     </a>
                                 }
-                                description={
-                                    <span style={{ color: 'white' }}>{item.description}</span>
-                                }
                             />
-                            <div style={{ color: 'white' }}>{item.acontent}</div>
+                            <div style={{ color: 'white' }}>{item.acontent.slice(0,100)}</div>
                         </List.Item>
                     </Link>
                 )}

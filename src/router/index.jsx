@@ -8,6 +8,7 @@ const Login = React.lazy(() => import('../pages/login'));
 const Home = React.lazy(() => import('../pages/home'));
 const Register = React.lazy(() => import('../pages/register'));
 const ArticleContent = React.lazy(() => import('../pages/home/articles/articleContent'))
+const Admin = React.lazy(() => import('../pages/admin/index'))
 
 const routes = [
     {
@@ -47,6 +48,10 @@ const routes = [
     {
         path:'/home/articles/content',
         element: <ArticleContent />
+    },
+    {
+        path:'/admin',
+        element: <Admin />
     }
 ];
 export default routes;

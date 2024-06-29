@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button, Form, Input } from 'antd';
 import axios from 'axios';
-import useRequest from 'server/http';
 import './index.css';
 
 const onFinishFailed = (errorInfo) => {
@@ -18,18 +17,16 @@ const Register = () => {
             email: values.email,
             uprofile: '0000'
         };
-        axios.post(
-            'http://localhost:9090/user/create',
-            newUser,
-            {
+        axios
+            .post('http://localhost:9090/user/create', newUser, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            }
-        ). then(res => {
-            console.log('注册成功')
-            navigate('/home/articles');
-        });
+            })
+            .then((res) => {
+                console.log('注册成功');
+                navigate('/login');
+            });
     };
     return (
         <div className="container">

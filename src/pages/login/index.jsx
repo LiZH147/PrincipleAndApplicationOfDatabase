@@ -17,10 +17,10 @@ const Login = () => {
                 url: `/user/info/${values.username}/${values.password}`
             })
             .then((res) => {
-                if (res.length != 0) {
+                if (res.length !== 0) {
                     // yj 12345678 2
                     localStorage.setItem('username', res[0].name);
-                    localStorage.setItem('userAvatr', res[0].uprofile)
+                    localStorage.setItem('userAvatar', res[0].uprofile)
                     localStorage.setItem('uid', res[0].uid)
                     navigate('/home/articles');
                     console.log('Success:', res, localStorage.getItem('userAvatr'));
