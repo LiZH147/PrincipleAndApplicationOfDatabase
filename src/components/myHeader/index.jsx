@@ -9,7 +9,7 @@ const { Header } = Layout;
 function MyHeader() {
     const [userinfo, setUserinfo] = useState({})
     userinfo.username = localStorage.getItem('username');
-    userinfo.userAvatar = localStorage.getItem('userAvatar')
+    userinfo.userAvatar = localStorage.getItem('userAvatar').slice(2)
     userinfo.uid = localStorage.getItem('uid')
 
     console.log('userinfo', userinfo)
@@ -35,7 +35,8 @@ function MyHeader() {
                         xxl: 63
                     }}
                     // src='https://img.lzxjack.top:99/202203302348298.webp'
-                    src={userinfo.Avatar}
+                    // src={userinfo.Avatar}
+                    src={require('./' + userinfo.userAvatar)}
                 />
                 <span style={{ marginLeft: '15px', color: 'white' }}>{userinfo.username}</span>
             </div>

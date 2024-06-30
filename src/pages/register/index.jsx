@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Button, Form, Input, Image, Upload } from 'antd';
+import { Button, Form, Input, Image, Upload, Avatar } from 'antd';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './index.css';
@@ -19,54 +19,63 @@ const getBase64 = (file) =>
 
 const Register = () => {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [imageUrl, setImageUrl] = useState();
-
-    const beforeUpload = (file) => {
-        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-        if (!isJpgOrPng) {
-            console.log('只能上传 JPG/PNG 文件!');
+    const userAvatar = 'userimg/1.jpg'
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [fileList, setFileList] = useState([
+        {
+            uid: '-1',
+            name: 'image.png',
+            status: 'done',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
+        {
+            uid: '-xxx',
+            percent: 50,
+            name: 'image.png',
+            status: 'uploading',
+            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        },
+        {
+            uid: '-5',
+            name: 'image.png',
+            status: 'error',
+        },
+    ]);
+    const handlePreview = async (file) => {
+        if (!file.url && !file.preview) {
+            file.preview = await getBase64(file.originFileObj);
         }
-        const isLt1M = file.size / 1024 / 1024 < 1;
-        if (!isLt1M) {
-            console.log('图片不能超过1MB!');
-        }
-        return isJpgOrPng && isLt1M;
+        setPreviewImage(file.url || file.preview);
+        setPreviewOpen(true);
     };
-    const handleChange = (info) => {
-        if (info.file.status === 'uploading') {
-            setLoading(true);
-            return;
-        }
-        // 当上传完毕
-        if (info.file.status === 'done') {
-            setLoading(false);
-            // 判断是否上传成功
-            if (info.file.response.code === 200) {
-                // 把返回的图像地址设置给 imageUrl
-                setImageUrl(info.file.response.data.imageUrl); // 取决于服务端返回的字段名
-            }
-        }
-    };
+    const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
     const uploadButton = (
-        <div>
-            {loading ? <LoadingOutlined /> : <PlusOutlined />}
+        <button
+            style={{
+                border: 0,
+                background: 'none',
+            }}
+            type="button"
+        >
+            <PlusOutlined />
             <div
                 style={{
-                    marginTop: 8
+                    marginTop: 8,
                 }}
             >
-                上传
+                Upload
             </div>
-        </div>
+        </button>
     );
+
     const onFinish = (values) => {
         console.log(values)
         const newUser = {
             name: values.username,
             password: values.password,
             email: values.email,
-            uprofile: !values.avatar ? values.avatar.file.name : null
+            uprofile: './userimg/1.jpg'
         };
         console.log('newUser', newUser)
         axios
@@ -99,28 +108,42 @@ const Register = () => {
                         label="头像"
                         name="avatar"
                     >
-                        <Upload
-                            listType="picture-card"
-                            className="avatar-uploader"
+                        <Avatar
+                            size={{
+                                xs: 15,
+                                sm: 20,
+                                md: 25,
+                                lg: 40,
+                                xl: 50,
+                                xxl: 63
+                            }}
+                            // src='https://img.lzxjack.top:99/202203302348298.webp'
+                            // src={userinfo.Avatar}
+                            src={require('../../components/myHeader/' + userAvatar)}
+                        />
+                        {/* <Upload
+                            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                            listType="picture-circle"
+                            fileList={fileList}
                             showUploadList={false}
-                            action="http://43.138.199.119/sqlFinal/avatarImgs"
-                            // action="../../asset/imgs/"
-                            beforeUpload={beforeUpload}
+                            onPreview={handlePreview}
                             onChange={handleChange}
-                            name="avatar"
                         >
-                            {imageUrl ? (
-                                <img
-                                    src={imageUrl}
-                                    alt="avatar"
-                                    style={{
-                                        width: '100%'
-                                    }}
-                                />
-                            ) : (
-                                uploadButton
-                            )}
+                            {fileList.length >= 8 ? null : uploadButton}
                         </Upload>
+                        {previewImage && (
+                            <Image
+                                wrapperStyle={{
+                                    display: 'none',
+                                }}
+                                preview={{
+                                    visible: previewOpen,
+                                    onVisibleChange: (visible) => setPreviewOpen(visible),
+                                    afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                                }}
+                                src={previewImage}
+                            />
+                        )} */}
                     </Form.Item>
 
                     {/* </div> */}

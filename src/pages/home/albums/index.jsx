@@ -2,78 +2,39 @@ import React, { memo, useEffect, useState } from 'react';
 import { Card, Col, Row } from 'antd';
 import useRequest from 'server/http';
 
-// const imgsData = [
-//     {
-//         alt: '1',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '2',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '3',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '4',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '5',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '6',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '7',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '8',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     },
-//     {
-//         alt: '9',
-//         src: 'https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png'
-//     }
-// ];
-
 const Albums = () => {
     const [imgsData, setImgsData] = useState([]);
     useEffect(() => {
         const uid = localStorage.getItem('uid');
         useRequest
             .get({
-                url:`/album/info/${uid}`
+                url: `/album/info/${uid}`
             }).then((res) => {
                 let imgdata = [];
                 res.forEach((item, idx) => {
                     let obj = {
-                        alt:res[0].pid,
-                        src:'http://localhost' + res[0].plink.slice(1)
+                        alt: item.pid,
+                        src: item.plink.slice(2)
                     }
                     imgdata.push(obj)
                 });
-                
+
                 setImgsData(imgdata)
-                console.log('albums',res)
+                console.log('albums', imgdata)
             })
-    })
+    }, [])
     return (
-        <Row gutter={16}>
+        <Row gutter={16} style={imgsData.length < 12 ? { height: '100vh' } : null}>
             {imgsData.map((item) => {
                 return (
-                    <Col span={4} style={{marginBottom: '10px'}}>
+                    <Col span={4} style={{ marginBottom: '10px' }}>
                         <Card
                             hoverable
                             style={{
-                                width: 240
+                                width: 300
                             }}
-                            cover={<img alt={item.alt} src={item.src} style={{width: 240, height: 310}} />}
-                        ></Card>
+                            
+                        ><img alt={item.alt} src={require('./' + item.src)} style={{ width: 256, height: 144, margin:'auto' }} /></Card>
                     </Col>
                 );
             })}
