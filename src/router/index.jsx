@@ -9,6 +9,11 @@ const Home = React.lazy(() => import('../pages/home'));
 const Register = React.lazy(() => import('../pages/register'));
 const ArticleContent = React.lazy(() => import('../pages/home/articles/articleContent'))
 const Admin = React.lazy(() => import('../pages/admin/index'))
+const Article = React.lazy(() => import('../pages/admin/article'))
+const Bulletin = React.lazy(() => import('../pages/admin/bulletin'))
+const Coment = React.lazy(() => import('../pages/admin/coment'))
+const EditProfile = React.lazy(() => import('../pages/home/editprofile'));
+
 
 const routes = [
     {
@@ -42,6 +47,10 @@ const routes = [
             {
                 path: '/home/personal',
                 element: <Personal />
+            },
+            {
+                path: '/home/editprofile',
+                element: <EditProfile />
             }
         ]
     },
@@ -51,7 +60,22 @@ const routes = [
     },
     {
         path:'/admin',
-        element: <Admin />
+        element: <Admin />,
+        children:[
+            {
+                path:'/admin',
+                element: <Navigate to="/admin/article" />
+            },{
+                path:'/admin/article',
+                element:<Article/>
+            },{
+                path:'/admin/bulletin',
+                element:<Bulletin/>
+            },{
+                path:'/admin/coment',
+                element:<Coment/>
+            }
+        ]
     }
 ];
 export default routes;

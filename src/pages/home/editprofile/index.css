@@ -1,0 +1,31 @@
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    background-color: rgb(22, 54, 51);
+}
+
+.edit-profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.edit-profile-content {
+    padding: 0rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 100%;
+}
+
+.edit-profile-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+}
+
+.form-item-button {
+    display: flex;
+    justify-content: center;
+}

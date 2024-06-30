@@ -65,7 +65,7 @@ const Article = () => {
     }, []);
 
     return (
-        <div className="articles">
+        <div className="article">
             <h3 style={{ color: 'white' }}>文章管理</h3>
             <List
                 style={{

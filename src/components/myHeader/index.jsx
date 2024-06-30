@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Layout, Avatar } from 'antd';
 import { headerCon } from '../../asset/data/local-data';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link } from 'react-router-dom';
 import './index.css';
 
 const { Header } = Layout;
@@ -25,20 +25,20 @@ function MyHeader() {
                 })}
             </div>
             <div className="userinfo">
-                <Avatar
-                    size={{
-                        xs: 15,
-                        sm: 20,
-                        md: 25,
-                        lg: 40,
-                        xl: 50,
-                        xxl: 63
-                    }}
-                    // src='https://img.lzxjack.top:99/202203302348298.webp'
-                    // src={userinfo.Avatar}
-                    src={require('./' + userinfo.userAvatar)}
-                />
-                <span style={{ marginLeft: '15px', color: 'white' }}>{userinfo.username}</span>
+            <Link to="/home/editprofile" style={{ display: 'flex', alignItems: 'center', color: 'white' }}>
+                    <Avatar
+                        size={{
+                            xs: 15,
+                            sm: 20,
+                            md: 25,
+                            lg: 40,
+                            xl: 50,
+                            xxl: 63
+                        }}
+                        src={require('./' + userinfo.userAvatar)}
+                    />
+                    <span style={{ position: 'relative', marginLeft: '10px', color: 'white' }}>{userinfo.username}</span>
+                </Link>
             </div>
         </Header>
     );

@@ -1,3 +1,7 @@
-.ant-list-item-meta-description{
+.ant-list-item-meta-description {
     color: white !important;
+}
+.coment {
+    margin: auto;
+    width: 80%;
 }

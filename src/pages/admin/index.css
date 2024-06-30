@@ -4,12 +4,6 @@
     background-size: 1910px 938px;
     display: flex;
 }
-.coments{
-    flex: 0 0 50%
-}
-.article{
-    flex: 1;
-}
 .headerBar {
     margin:auto;
     color: white;

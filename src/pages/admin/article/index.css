@@ -4,3 +4,7 @@
 .ant-list-item-meta-description{
     color: white !important;
 }
+.article{
+    margin: auto;
+    width: 80%;
+}

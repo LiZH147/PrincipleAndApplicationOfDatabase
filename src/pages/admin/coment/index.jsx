@@ -64,7 +64,7 @@ const Coment = () => {
     }, []);
 
     return (
-        <div className="articles">
+        <div className="coment">
             <h3 style={{ marginLeft: '20px', color: 'white' }}>评论管理</h3>
             <List
                 style={{

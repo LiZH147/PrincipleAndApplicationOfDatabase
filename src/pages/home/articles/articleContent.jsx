@@ -28,36 +28,53 @@ const ArticleContent = () => {
         })
         console.log('ref', newComenttemp)
     }
-
+    const getComentName = async (uid) => {
+        try {
+            const res = await useRequest.get({
+                url: `/user/info/${uid}`
+            });
+            console.log("name", res[0].name);
+            return res[0].name;
+        } catch (error) {
+            console.error('Error fetching user info:', error);
+            return null;
+        }
+    };
     useEffect(() => {
-        useRequest
-            .get({
-                url: `/coment/info/${search.get('aid')}`
-            })
-            .then((res) => {
+        const fetchData = async () => {
+            try {
+                const res = await useRequest.get({
+                    url: `/coment/info/${search.get('aid')}`
+                });
                 let temp = [];
-                res.forEach((item, idx) => {
+                for (const item of res) {
+                    const uname = await getComentName(item.uid);
+                    console.log("u", uname);
                     let obj = {
-                        uid:item.uid,
+                        name: uname,
+                        uid: item.uid,
                         content: item.ccontent,
                         time: item.ctime
-                    }
-                    temp.push(obj)
-                })
-                setCommentData(temp)
-                console.log('coments', res);
-            })
-            .catch((err) => console.log(err));
+                    };
+                    temp.push(obj);
+                }
+                setCommentData(temp);
+                console.log('comments', temp);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+        fetchData();
     }, []);
     return (
         <div className="home" style={{}}>
             <MyHeader />
-            <div style={{ color: 'white', textAlign: 'center', fontSize: '25px', height: '50px' }}>
+            <div style={{ color: 'white', textAlign: 'center', fontSize: '25px', height: '50px', marginTop:'15px' }}>
                 <span>{title}</span>
             </div>
             <Card
                 style={{
-                    marginTop: 16,
+                    marginTop: 3,
                     width: '50%',
                     margin: 'auto',
                     backgroundColor: 'rgb(12, 29, 27)',
@@ -99,7 +116,7 @@ const ArticleContent = () => {
                                 }
                                 title={
                                     <a style={{ color: 'white' }} href="https://ant.design">
-                                        {item.uid}
+                                        {item.name}
                                     </a>
                                 }
                                 description={item.content}

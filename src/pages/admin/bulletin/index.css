@@ -1,0 +1,19 @@
+.ant-list-item-meta-description {
+    color: white !important;
+}
+.bulletins {
+    margin: auto;
+    width: 80%;
+}
+.header {
+    display: flex;
+}
+.left {
+    flex: 0 0 80%;
+    margin-left: 20px;
+    color: white;
+}
+.right {
+    flex: 1;
+    margin-top: 15px;
+}
