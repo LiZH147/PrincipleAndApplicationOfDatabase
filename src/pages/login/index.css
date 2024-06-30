@@ -1,14 +1,15 @@
-.container{
+.container {
     display: flex;
     width: 100%;
     height: 100%;
 }
-.left{
+.left {
     flex: 0 0 50%;
     height: 100vh;
-    background-color: rgb(18, 83, 143);
+    /* background-color: rgb(18, 83, 143); */
+    background-image: url('../../asset/imgs/login&register.jpg');
 }
-.right{
+.right {
     flex: 1;
     height: 100vh;
     display: flex;

@@ -12,3 +12,4 @@ export const headerCon = [
         label: '个人中心'
     }
 ]
+export const imgBaseUrl = 'http://localhost:9090'

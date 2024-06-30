@@ -6,7 +6,8 @@
 .left{
     flex: 0 0 50%;
     height: 100vh;
-    background-color: rgb(18, 83, 143);
+    /* background-color: rgb(18, 83, 143); */
+    background-image: url('../../asset/imgs/login&register.jpg');
 }
 .right{
     flex: 1;
@@ -14,4 +15,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.avatar{
+    margin: 0 80px;
 }
